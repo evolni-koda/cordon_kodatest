@@ -1,0 +1,628 @@
+{%- comment -%} VERSION: 0.0.3 Please do not delete this line. {%- endcomment -%}
+
+{%- liquid
+	assign boost_translations = shop.metafields.boostpfs-settings.labelTranslations
+  assign boost_settings = shop.metafields.bc-sf-filter.settings
+	assign boost_in_collection_search = boost_settings | split: 'enableCollectionSearch":' | last | split: ',"' | first | strip 
+	assign current_locale = request.locale.iso_code
+	assign primary_locale = current_locale
+	for locale in shop.published_locales
+		if locale.primary
+			assign primary_locale = locale.iso_code
+			break
+		endif
+	endfor
+	assign label_toolbar_viewas = boost_translations[current_locale].defaultTheme.toolbarViewAs | default:  boost_translations[primary_locale].defaultTheme.toolbarViewAs | escape
+	assign label_items_with_count_one = boost_translations[current_locale].defaultTheme.toolbarProduct | default:  boost_translations[primary_locale].defaultTheme.toolbarProduct | escape
+	assign label_items_with_count_other = boost_translations[current_locale].defaultTheme.toolbarProducts | default:  boost_translations[primary_locale].defaultTheme.toolbarProducts | escape
+	assign label_sale = boost_translations[current_locale].defaultTheme.productItemSale | default:  boost_translations[primary_locale].defaultTheme.productItemSale | escape
+	assign label_soldout = boost_translations[current_locale].defaultTheme.productItemSoldOut | default:  boost_translations[primary_locale].defaultTheme.productItemSoldOut | escape
+	assign label_from = boost_translations[current_locale].defaultTheme.productItemFrom | default:  boost_translations[primary_locale].defaultTheme.productItemFrom | escape
+  assign label_sale_percent = 'percent' | escape
+
+	assign layout_type = section.settings.layout_type | default: 'box'
+  assign show_collection_image = section.settings.show_collection_image
+  assign show_collection_des = section.settings.show_collection_des
+  assign collection_header_bg = section.settings.collection_header_bg | default: ''
+  assign collection_header_text = section.settings.collection_header_text | default: ''
+
+  assign switch_layout_filter = section.settings.switch_layout_filter
+  assign filter_layout = section.settings.filter_layout
+
+	assign enable_filter_sticky_d = section.settings.enable_filter_sticky_d
+	assign enable_filter_sticky_m = section.settings.enable_filter_sticky_m
+	
+	assign show_view_as = section.settings.show_view_as
+	assign show_product_count = section.settings.show_product_count
+	assign show_sort_by = section.settings.show_sort_by
+	assign show_view_as_m = section.settings.show_view_as_m
+	assign show_product_count_m = section.settings.show_product_count_m
+	assign show_sort_by_m = section.settings.show_sort_by_m
+	assign view_as_type = section.settings.view_as_type | default: 'view_as_type_grid_list'
+
+  assign product_item_type = section.settings.product_item_type | default: 'grid'
+  assign product_item_layout = section.settings.product_item_layout | default: 'no-border'
+  assign text_alignment = section.settings.text_alignment | default: 'left'
+	assign show_vendor = section.settings.show_vendor
+	assign show_price = section.settings.show_price
+  assign show_product_review = section.settings.show_product_review
+  assign show_detail_when_hover = section.settings.show_detail_when_hover
+  assign active_image_swap = section.settings.active_image_swap
+
+  assign aspect_ratio = section.settings.aspect_ratio | default: 'auto'
+	assign aspect_ratio_other = section.settings.aspect_ratio_other | default: ''
+	assign product_img_crop = section.settings.product_img_crop | default: 'none'
+  
+  assign products_per_page = section.settings.products_per_page | default: 15
+  assign products_per_row = section.settings.products_per_row | default: 3
+	assign products_per_row_m = section.settings.products_per_row_m | default: 2
+
+  assign product_title_color = section.settings.product_title_color
+  assign product_title_font = section.settings.product_title_font
+  assign product_title_size = section.settings.product_title_size
+  assign product_title_transform = section.settings.product_title_transform
+
+  assign product_vendor_color = section.settings.product_vendor_color
+  assign product_vendor_font = section.settings.product_vendor_font
+  assign product_vendor_size = section.settings.product_vendor_size
+  assign product_vendor_transform = section.settings.product_vendor_transform
+
+  assign product_price_color = section.settings.product_price_color
+  assign product_old_price_color = section.settings.product_old_price_color
+  assign product_sale_price_color = section.settings.product_sale_price_color
+  assign product_price_font = section.settings.product_price_font
+  assign product_price_size = section.settings.product_price_size
+
+  assign product_des_color = section.settings.product_des_color
+  assign product_des_font = section.settings.product_des_font
+  assign product_des_size = section.settings.product_des_size
+
+  assign swatch_enable = section.settings.swatch_enable
+  assign show_swatch_tooltip = section.settings.show_swatch_tooltip
+  assign swatch_change_img = section.settings.swatch_change_img | default: 'hover'
+  assign swatch_by_color_apply = section.settings.swatch_by_color_apply
+  assign swatch_by_color_shape = section.settings.swatch_by_color_shape | default: 'circle'
+  assign swatch_by_img_apply = section.settings.swatch_by_img_apply
+  assign swatch_by_img_shape = section.settings.swatch_by_img_shape | default: 'circle'
+  assign swatch_by_pro_img_apply = section.settings.swatch_by_pro_img_apply
+  assign swatch_by_pro_img_shape = section.settings.swatch_by_pro_img_shape | default: 'circle'
+  assign swatch_by_text_apply = section.settings.swatch_by_text_apply
+  assign swatch_by_text_shape = section.settings.swatch_by_text_shape | default: 'square'
+  assign swatch_by_text_bg = section.settings.swatch_by_text_bg
+  assign swatch_by_text_color = section.settings.swatch_by_text_color
+  assign swatch_by_text_border = section.settings.swatch_by_text_border
+
+  assign label_position = section.settings.label_position | default: 'top_left'
+  assign label_type = section.settings.label_type | default: 'rectangle'
+  assign sale_label_enable = section.settings.sale_label_enable
+  assign sale_label_display = section.settings.sale_label_display | default: 'text'
+  assign sale_label_bg = section.settings.sale_label_bg
+  assign sale_label_text = section.settings.sale_label_text
+  assign sale_label_img = section.settings.sale_label_img
+
+	assign sold_out_enable = section.settings.sold_out_enable
+  assign sold_out_display = section.settings.sold_out_display | default: 'text'
+  assign sold_out_bg = section.settings.sold_out_bg
+  assign sold_out_text = section.settings.sold_out_text
+  assign sold_out_img = section.settings.sold_out_img
+	
+  assign tag_label_enable = section.settings.tag_label_enable
+  assign tag_label_bg = section.settings.tag_label_bg
+  assign tag_label_text = section.settings.tag_label_text
+-%}
+
+{% capture products_item_settings %}
+	{% if aspect_ratio == 'auto' %}boost-pfs-filter-product-item-equal-height-auto {% endif %} boost-pfs-filter-product-item-label-type-{{ label_type }} boost-pfs-filter-product-item-show-details-{{ show_detail_when_hover }} boost-pfs-filter-product-item-layout-{{ product_item_layout }} boost-pfs-filter-product-item-label-{{ label_position }}  boost-pfs-filter-product-item-text-alignment-{{ text_alignment }}  
+{% endcapture %}
+
+{%- paginate collection.products by products_per_page -%}
+
+<style>
+  {% if collection_header_text != blank %}
+  .boost-pfs-filter-collection-header-wrapper .boost-pfs-filter-collection-description,
+  .boost-pfs-filter-collection-header-wrapper .boost-pfs-filter-collection-description p,
+  .boost-pfs-filter-collection-header-wrapper .boost-pfs-filter-collection-header, 
+  .boost-pfs-search-container .boost-pfs-search-result-header {
+    color: {{ collection_header_text }};
+  }
+  {% endif %}
+
+  {% if collection_header_bg != blank %}
+  .boost-pfs-filter-collection-header-wrapper {
+    background-color: {{ collection_header_bg }};
+  }
+  {% endif %}
+
+  {% if product_title_color != blank or product_title_font != blank or product_title_size != blank or product_title_transform != blank  %}
+    .boost-pfs-filter-product-item-title {
+      {% if product_title_color != blank %}
+          color: {{ product_title_color }};
+      {% endif %}
+
+      {% if product_title_font != blank %}
+      font-family: {{ product_title_font.family }};
+      font-weight: {{ product_title_font.weight }};
+      font-style: {{ product_title_font.style }};
+      {% endif %}
+
+      {% if product_title_transform != blank %}
+      text-transform: {{ product_title_transform }};
+      {% endif %}
+    }
+    {% if product_title_size != blank %}
+      @media (min-width: 768px){
+        .boost-pfs-filter-product-item-title {
+          font-size: {{ product_title_size }}px;
+        }
+      }
+    {% endif %}
+  {% endif %}
+
+  {% if product_vendor_color != blank or product_vendor_size != blank or product_vendor_font != blank or product_vendor_transform != blank  %}
+    .boost-pfs-filter-product-item-vendor {
+      {% if product_vendor_color != blank %}
+      color: {{ product_vendor_color }};
+      {% endif %}
+
+      {% if product_vendor_font != blank %}
+      font-family: {{ product_vendor_font.family }};
+      font-weight: {{ product_vendor_font.weight }};
+      font-style: {{ product_vendor_font.style }};
+      {% endif %}
+
+      {% if product_vendor_transform != blank %}
+      text-transform: {{ product_vendor_transform }};
+      {% endif %}
+    }
+    {% if product_vendor_size != blank %}
+      @media (min-width: 768px){
+        .boost-pfs-filter-product-item-vendor {
+          font-size: {{ product_vendor_size }}px;
+        }
+      }
+    {% endif %}
+  {% endif %}
+  {% if product_price_color != blank or product_price_size != blank or product_price_font != blank or product_price_size != blank   %}
+    .boost-pfs-filter-product-item-price {
+      {% if product_price_color != blank %}
+      color: {{ product_price_color }};
+      {% endif %}
+
+      {% if product_price_font != blank %}
+      font-family: {{ product_price_font.family }};
+      font-weight: {{ product_price_font.weight }};
+      font-style: {{ product_price_font.style }};
+      {% endif %}
+    }
+    {% if product_price_size != blank %}
+      @media (min-width: 768px){
+        .boost-pfs-filter-product-item-price {
+          font-size: {{ product_price_size }}px;
+        }
+      }
+    {% endif %}
+  {% endif %}
+
+  {% if product_old_price_color != blank %}
+  .boost-pfs-filter-product-item-price s {
+    color: {{ product_old_price_color }};
+  }
+  {% endif %}
+
+  {% if product_sale_price_color != blank %}
+  .boost-pfs-filter-product-item-price .boost-pfs-filter-product-item-sale-price {
+    color: {{ product_sale_price_color }};
+  }
+  {% endif %}
+
+  {% if product_des_color != blank or product_des_size != blank or product_des_font != blank %}
+    .boost-pfs-filter-product-item-list .boost-pfs-filter-des {
+      {% if product_des_color != blank %}
+      color: {{ product_des_color }};
+      {% endif %}
+
+      {% if product_des_font != blank %}
+      {% assign product_des_font = product_des_font %}
+      font-family: "{{ product_des_font.family }}";
+      font-weight: {{ product_des_font.weight }};
+      font-style: {{ product_des_font.style }};
+      {% endif %}
+    }
+    {% if product_des_size != blank %}
+      @media (min-width: 768px){
+        .boost-pfs-filter-product-item-list .boost-pfs-filter-des {
+          font-size: {{ product_des_size }}px;
+        }
+      }
+    {% endif %}
+  {% endif %}
+
+  {% if sale_label_bg != blank or sale_label_text != blank %}
+  .boost-pfs-filter-product-item-label .sale {
+    {% if sale_label_bg != blank %}
+    background-color: {{ sale_label_bg }};
+    {% endif %}
+
+    {% if sale_label_text != blank %}
+    color: {{ sale_label_text }};
+    {% endif %}
+  }
+  {% endif %}
+
+  {% if sold_out_bg != blank or sold_out_text != blank %}
+  .boost-pfs-filter-product-item-label .soldout {
+    {% if sold_out_bg != blank %}
+    background-color: {{ sold_out_bg }};
+    {% endif %}
+
+    {% if sold_out_text != blank %}
+    color: {{ sold_out_text }};
+    {% endif %}
+  }
+  {% endif %}
+
+  {% if tag_label_bg != blank or tag_label_text != blank %}
+  .boost-pfs-filter-product-item-label .tag {
+    {% if tag_label_bg != blank %}
+    background-color: {{ tag_label_bg }};
+    {% endif %}
+
+    {% if tag_label_text != blank %}
+    color: {{ tag_label_text }};
+    {% endif %}
+  }
+  {% endif %}
+
+  {% if swatch_by_text_bg != blank or swatch_by_text_color != blank or swatch_by_text_border != blank %}
+  .boost-pfs-filter-item-swatch-type-text>li:not(.boost-pfs-filter-item-swatch-more) {
+    {% if swatch_by_text_bg != blank %}
+    background-color: {{ swatch_by_text_bg }};
+    {% endif %}
+
+    {% if swatch_by_text_color != blank %}
+    color: {{ swatch_by_text_color }};
+    {% endif %}
+
+    {% if swatch_by_text_border != blank %}
+    border-color: {{ swatch_by_text_border }};
+    {% endif %}
+  }
+  {% endif %}
+  
+</style>
+
+{%- comment -%} COLLECTION HEADER {%- endcomment -%}
+<div class="boost-pfs-filter-collection-header-wrapper boost-pfs-filter-collection-image {% if collection.image and show_collection_image %}boost-pfs-filter-collection-has-image{% endif %}" {% if collection.image and show_collection_image %} style="background-image: url({{ collection.image | img_url: '2048x600', crop: 'top' }});" {% endif %}>
+	<div class="boost-pfs-container-default-{{ layout_type }}">
+		<div class="boost-pfs-section-header">
+			<h1 class="boost-pfs-filter-collection-header">
+				<span>
+					{{ collection.title }}
+				</span>
+			</h1>
+			{%- if collection.description and show_collection_des  != blank -%}
+			<div class="boost-pfs-filter-collection-description rte">
+				{{ collection.description }}
+			</div>
+			{%- endif -%}
+		</div>
+	</div>
+</div>
+{%- comment -%} END COLLECTION HEADER {%- endcomment -%}
+
+{% if boost_in_collection_search == 'true' %}
+  <div class="boost-pfs-container-default-{{ layout_type }} boost-pfs-in-collection-search">
+    {% render 'boost-pfs-filter-skeleton', width: 4 %}
+  </div>
+{% endif %}
+
+{%- comment -%} TOOLBAR TOP MOBILE {%- endcomment -%}
+<div class="boost-pfs-filter-toolbar-top-mobile {% if hide_toolbar_sort_by_mobile %} boost-pfs-filter-toolbar-top-mobile-hide-sort-by {% endif %} {% if enable_filter_sticky_m %}boost-pfs-filter-toolbar-sticky-mobile{% endif %}">
+  <div class="boost-pfs-filter-toolbar-top-mobile-inner {% if show_sort_by_m %} boost-pfs-filter-toolbar-show-sort-by-mobile {% endif %}">
+    {%- if show_sort_by_m -%}
+    	<div class="boost-pfs-filter-top-sorting boost-pfs-filter-top-sorting-mobile boost-pfs-filter-custom-sorting">{%- render 'boost-pfs-filter-skeleton', type: 'button' -%}</div>
+    {% endif %}
+    <div class="boost-pfs-filter-tree-mobile-button">{%- render 'boost-pfs-filter-skeleton', type: 'button' -%}</div>
+  </div>
+</div>
+{%- comment -%} END TOOLBAR TOP MOBILE {%- endcomment -%}
+
+{%- comment -%} TOOLBAR {%- endcomment -%}
+<div class="boost-pfs-filter-default-toolbar {% if show_view_as_m == false %} boost-pfs-filter-toolbar-top-mobile-hide-view-as {% endif %} {% if show_product_count_m == false %} boost-pfs-filter-toolbar-top-mobile-hide-product-count {% endif %}">
+  {% if show_view_as == true or show_product_count == true or show_sort_by == true or show_view_as_m == true or show_product_count_m == true %}
+    <div class="boost-pfs-container-default-{{ layout_type }} boost-pfs-filter-default-toolbar-inner {% if enable_filter_tree_button_desktop_v and enable_filter_sticky_d  %} boost-pfs-filter-sticky-wrapper {% endif %}">
+      {% if show_view_as == true or show_view_as_m == true or filter_layout == 'filter_layout_collapse' or filter_layout == 'filter_layout_slide' %}
+        <div class="boost-pfs-filter-toolbar-item boost-pfs-filter-toolbar-type boost-pfs-filter-{{ view_as_type }} {% if show_view_as == true or filter_layout == 'filter_layout_collapse' or filter_layout == 'filter_layout_slide'  %}boost-pfs-filter-display-type-d{% endif %} {% if show_view_as_m == true or filter_layout == 'filter_layout_collapse' or filter_layout == 'filter_layout_slide'  %}boost-pfs-filter-display-type-m{% endif %}">
+          {% if filter_layout == 'filter_layout_collapse' or filter_layout == 'filter_layout_slide' %}
+            <button class="boost-pfs-filter-custom-filter-button"> 
+              <span>Filter</span>
+            </button> 
+          {% endif %}
+          {%- if show_view_as == true or show_view_as_m == true -%}
+            <div class="boost-pfs-filter-top-display-type {% if show_view_as %}boost-pfs-filter-top-display-type-d{% endif %} {% if show_view_as_m %}boost-pfs-filter-top-display-type-m{% endif %}">{%- render 'boost-pfs-filter-skeleton', width: 2 -%}</div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      
+      {%- if show_product_count == true or show_product_count_m == true -%}
+        <div class="boost-pfs-filter-toolbar-item boost-pfs-filter-toolbar-count {% if show_product_count%}boost-pfs-filter-toolbar-count-d{% endif %} {% if show_product_count_m %}boost-pfs-filter-toolbar-count-m{% endif %}">
+          <span class="boost-pfs-filter-total-product">{%- render 'boost-pfs-filter-skeleton', width: 1 -%}</span>
+        </div>
+      {%- endif -%}
+      
+      {%- if show_sort_by -%}
+        <div class="boost-pfs-filter-toolbar-item boost-pfs-filter-custom-sorting boost-pfs-filter-top-sorting">{%- render 'boost-pfs-filter-skeleton', width: 1 -%}</div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>
+{%- comment -%} END TOOLBAR {%- endcomment -%}
+
+<div id="easyModal" class="modal"></div>
+
+<div class="boost-pfs-filter-wrapper {% if enable_filter_sticky_d %} boost-pfs-filter-tree-h-sticky-filter {% endif %} {% if filter_layout == 'filter_layout_collapse' %}boost-pfs-filter-layout-collapse {% endif %} {% if filter_layout == 'filter_layout_slide' %}boost-pfs-filter-layout-slide {% endif %}">
+	{%- if switch_layout_filter == 'switch_layout_filter_horizontal' -%}
+    <div class="boost-pfs-filter-tree-h-wrapper">
+      <div class="boost-pfs-container-default-{{ layout_type }}">
+        <div class="boost-pfs-filter-tree boost-pfs-filter-tree-h" data-is-desktop>
+          {%- render 'boost-pfs-filter-skeleton', type: 'filter-tree-h' -%}
+        </div>
+      </div>
+    </div>
+    <div class="boost-pfs-container-default-{{ layout_type }}">
+      <div class="boost-pfs-filter-refine-by-wrapper-h"></div>
+    </div>
+	{%- endif -%}
+	<div class="boost-pfs-container-default-{{ layout_type }}">
+		{%- if switch_layout_filter == 'switch_layout_filter_horizontal' -%}
+		<div class="boost-pfs-filter-tree boost-pfs-filter-tree-v" data-is-mobile></div>
+		{%- endif -%}
+    {%- if switch_layout_filter != 'switch_layout_filter_horizontal' and filter_layout == 'filter_layout_slide' -%}
+			<div class="boost-pfs-filter-custom-drawer-overlay"></div>
+			{%- endif -%}
+      {%- if switch_layout_filter != 'switch_layout_filter_horizontal' -%}
+        <div class="boost-pfs-filter-left-col">
+          <div class="boost-pfs-filter-left-col-inner">
+            {%- if filter_layout == 'filter_layout_slide' -%}
+            <div class="boost-pfs-filter-custom-drawer-close"></div>
+            {% endif %}
+            
+            <div class="boost-pfs-filter-tree boost-pfs-filter-tree-v">{% render 'boost-pfs-filter-skeleton', type: 'filter-tree' %}</div>
+            
+          </div>
+        </div>
+			{%- endif -%}
+
+		{%- if switch_layout_filter != 'switch_layout_filter_horizontal' -%}
+		  <div class="boost-pfs-filter-right-col">
+		{%- endif -%}
+			<div class="boost-pfs-filter-products {{ products_item_settings }}">
+				{%- for product in collection.products -%}
+				{%- render 'boost-pfs-filter-product-item',
+					product: product,
+					products_per_row: products_per_row,
+					products_per_row_m: products_per_row_m,
+					show_detail_when_hover: show_detail_when_hover,
+					show_vendor: show_vendor,
+					show_price: show_price,
+					
+					active_image_swap: active_image_swap,
+					show_product_review: show_product_review,
+					swatch_enable: swatch_enable,
+          show_swatch_tooltip: show_swatch_tooltip
+					swatch_change_img: swatch_change_img,
+          swatch_by_color_apply: swatch_by_color_apply,
+          swatch_by_color_shape: swatch_by_color_shape,
+          swatch_by_img_apply: swatch_by_img_apply,
+          swatch_by_img_shape: swatch_by_img_shape,
+          swatch_by_pro_img_apply: swatch_by_pro_img_apply,
+          swatch_by_pro_img_shape: swatch_by_pro_img_shape,
+          swatch_by_text_apply: swatch_by_text_apply,
+          swatch_by_text_shape: swatch_by_text_shape,
+					aspect_ratio: aspect_ratio,
+					aspect_ratio_other: aspect_ratio_other,
+					product_img_crop: product_img_crop,
+					tag_label_enable: tag_label_enable,
+
+          label_type: label_type,
+					sale_label_enable: sale_label_enable,
+          sale_label_display: sale_label_display,
+					sale_label_img: sale_label_img,
+          
+          sold_out_enable: sold_out_enable,
+          sold_out_display: sold_out_display,
+					sold_out_img: sold_out_img,
+
+					product_item_type: product_item_type,
+					label_soldout: label_soldout,
+					label_sale: label_sale,
+					label_from: label_from,
+					label_toolbar_viewas: label_toolbar_viewas,
+					label_items_with_count_one: label_items_with_count_one,
+					label_items_with_count_other: label_items_with_count_other,
+          label_sale_percent: label_sale_percent
+				-%}
+				{%- endfor -%}
+			</div>
+			<div class="boost-pfs-filter-bottom-pagination boost-pfs-filter-bottom-pagination-default">
+				{%- if paginate.pages > 1 -%}
+				{%- render 'boost-pfs-filter-pagination' -%}
+				{%- endif -%}
+			</div>
+			<div class="boost-pfs-filter-load-more"></div>
+
+		{%- if switch_layout_filter != 'switch_layout_filter_horizontal' -%}
+		</div>
+		{%- endif -%}
+	</div>
+
+	{%- comment -%} start-bc-most-popular-template {%- endcomment -%}
+	<div class="boost-pfs-most-popular-products-wrapper boost-pfs-widget-slider-wrapper boost-pfs-container-default-{{ layout_type }} {{ products_item_settings }}">
+		{%- comment -%} <div class="boost-pfs-most-popular"></div> {%- endcomment -%}
+	</div>
+	{%- comment -%} end-bc-most-popular-template {%- endcomment -%}
+	{%- comment -%} start-bc-recently-viewed-template {%- endcomment -%}
+	<div class="boost-pfs-recent-products-wrapper boost-pfs-widget-slider-wrapper boost-pfs-container-default-{{ layout_type }} {{ products_item_settings }}">
+		{%- comment -%} <div class="boost-pfs-recently-viewed"></div> {%- endcomment -%}
+	</div>
+	{%- comment -%} end-bc-recently-viewed-template {%- endcomment -%}
+
+</div>
+{%- endpaginate -%}
+
+{%- render 'boost-pfs-theme-config',
+	layout_type: layout_type,
+	enable_filter_sticky_d: enable_filter_sticky_d,
+	view_as_type: view_as_type,
+	products_per_page: products_per_page,
+	products_per_row: products_per_row,
+	products_per_row_m: products_per_row_m,
+	show_detail_when_hover: show_detail_when_hover,
+	show_vendor: show_vendor,
+	show_price: show_price,
+	active_image_swap: active_image_swap,
+	show_product_review: show_product_review,
+  
+	swatch_enable: swatch_enable,
+  show_swatch_tooltip: show_swatch_tooltip,
+	swatch_change_img: swatch_change_img,
+  swatch_by_color_apply: swatch_by_color_apply,
+  swatch_by_color_shape: swatch_by_color_shape,
+  swatch_by_img_apply: swatch_by_img_apply,
+  swatch_by_img_shape: swatch_by_img_shape,
+  swatch_by_pro_img_apply: swatch_by_pro_img_apply,
+  swatch_by_pro_img_shape: swatch_by_pro_img_shape,
+  swatch_by_text_apply: swatch_by_text_apply,
+  swatch_by_text_shape: swatch_by_text_shape,
+
+	aspect_ratio: aspect_ratio,
+	aspect_ratio_other: aspect_ratio_other,
+	product_img_crop: product_img_crop,
+	tag_label_enable: tag_label_enable,
+
+  label_type: label_type,
+	sale_label_enable: sale_label_enable,
+  sale_label_display: sale_label_display,
+  sale_label_img: sale_label_img,
+
+  sold_out_enable: sold_out_enable,
+  sold_out_display: sold_out_display,
+	sold_out_img: sold_out_img,
+
+	product_item_type: product_item_type,
+
+	label_soldout: label_soldout,
+	label_sale: label_sale,
+	label_from: label_from,
+	label_toolbar_viewas: label_toolbar_viewas,
+	label_items_with_count_one: label_items_with_count_one,
+	label_items_with_count_other: label_items_with_count_other,
+  label_sale_percent: label_sale_percent
+-%}
+
+
+{% schema %}
+{
+  "name": "t:sections.featured-collection.name",
+  "tag": "section",
+  "class": "spaced-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Featured collection",
+      "label": "t:sections.featured-collection.settings.title.label"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.featured-collection.settings.collection.label"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 2,
+      "default": 4,
+      "label": "t:sections.featured-collection.settings.products_to_show.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": true,
+      "label": "t:sections.featured-collection.settings.show_view_all.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "swipe_on_mobile",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.swipe_on_mobile.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.featured-collection.settings.header.content"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.featured-collection.settings.image_ratio.options__1.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.featured-collection.settings.image_ratio.options__2.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.featured-collection.settings.image_ratio.options__3.label"
+        }
+      ],
+      "default": "adapt",
+      "label": "t:sections.featured-collection.settings.image_ratio.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.show_secondary_image.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "add_image_padding",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.add_image_padding.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image_outline",
+      "default": true,
+      "label": "t:sections.featured-collection.settings.show_image_outline.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.show_vendor.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.show_rating.label",
+      "info": "t:sections.featured-collection.settings.show_rating.info"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured-collection.presets.name"
+    }
+  ]
+}
+{% endschema %}
+
+<!--add koda-->
+{{ 'koda_custom.css' | asset_url | stylesheet_tag }}
+{{ 'koda.js' | asset_url | script_tag }}
