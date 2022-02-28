@@ -4,9 +4,45 @@
       "type": "main-page",
       "settings": {
       }
+    },
+    "1646042469142061f8": {
+      "type": "rich-text",
+      "blocks": {
+        "1646042469ef0423b8-0": {
+          "type": "heading",
+          "settings": {
+            "heading": "コーポレートだけ",
+            "heading_size": "h1"
+          }
+        },
+        "1646042469ef0423b8-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.<\/p>"
+          }
+        },
+        "1646042469ef0423b8-2": {
+          "type": "button",
+          "settings": {
+            "button_label": "Button label",
+            "button_link": "",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "1646042469ef0423b8-0",
+        "1646042469ef0423b8-1",
+        "1646042469ef0423b8-2"
+      ],
+      "settings": {
+        "color_scheme": "background-1",
+        "full_width": true
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "1646042469142061f8"
   ]
 }
