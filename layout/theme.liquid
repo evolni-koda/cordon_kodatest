@@ -16,7 +16,7 @@
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     {%- endunless -%}
 
-    <title>★★
+    <title>
       {{ page_title }}
       {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
       {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
@@ -140,7 +140,43 @@
     </a>
 
     {% section 'announcement-bar' %}
-    {% section 'header' %}
+
+
+
+{% assign beatles = "'corp', 'testpage'" | split: ", " %}
+
+{% for corp-handle in beatles %}
+  
+
+{% endfor %}
+
+
+{% if page.children.size > 0 %}
+<ul>
+{% for child in page.children %}
+<li>{{ child.title }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+  {% if page.handle == {{ corp-handle }} %}
+    {% section 'header-corp' %}
+
+        
+    {% else %}
+
+    
+    {% section 'header-shop' %}
+    {% endif %}
+
+
+    {% comment %}
+    ★デフォルトヘッダ
+        {% section 'header' %}
+    {% endcomment %}
+
+    
+    
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
       {{ content_for_layout }}
     </main>
